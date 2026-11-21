@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 
 #include "domain.h"
 #include "validation.h"
@@ -7,51 +8,123 @@
 #include "io.h"
 #include "benchmark.h"
 
+/* ================= EQUIPMENT STOCK HELPER ================= */
+
+int getEquipmentStock(const Hospital *hospital, const char *name) {
+    int total = 0;
+
+    for (int i = 0; i < hospital->equipment_count; i++) {
+        if (strcmp(hospital->equipment[i].name, name) == 0) {
+            total += hospital->equipment[i].available;
+        }
+    }
+
+    return total;
+}
+
+/* ================= ADD SURGERY ================= */
+
 void addSurgeryMenu(Hospital *hospital) {
     Surgery s = {0};
 
     printf("\nEnter Surgery ID: ");
-    scanf("%d", &s.id);
+    if (scanf("%d", &s.id) != 1) return;
 
     printf("Enter Surgery Name: ");
-    scanf(" %49[^\n]", s.name);
+    if (scanf(" %49[^\n]", s.name) != 1) return;
+
+    printf("Enter Required Specialization: ");
+    if (scanf(" %49[^\n]", s.required_specialization) != 1) return;
 
     printf("Enter Duration (minutes): ");
-    scanf("%d", &s.duration);
+    if (scanf("%d", &s.duration) != 1) return;
 
     printf("Enter Priority (1-5): ");
-    scanf("%d", &s.priority);
+    if (scanf("%d", &s.priority) != 1) return;
 
     printf("Enter Start Time (minutes from 00:00): ");
-    scanf("%d", &s.start_time);
+    if (scanf("%d", &s.start_time) != 1) return;
 
-    printf("Enter Equipment Required: ");
-    scanf("%d", &s.equipment_required);
+    s.end_time = s.start_time + s.duration;
 
-    if (!validateSurgery(&s) || s.equipment_required < 0) {
+    printf("\nHow many different equipment types are required? (0-%d): ",
+           MAX_REQUIRED_EQUIPMENT);
+
+    if (scanf("%d", &s.required_equipment_count) != 1) return;
+
+    if (s.required_equipment_count < 0 ||
+        s.required_equipment_count > MAX_REQUIRED_EQUIPMENT) {
+        printf("Invalid equipment count.\n");
+        return;
+    }
+
+    s.equipment_required = 0;
+
+    for (int i = 0; i < s.required_equipment_count; i++) {
+        RequiredEquipment *required = &s.required_equipment[i];
+
+        printf("\nEquipment %d name: ", i + 1);
+        if (scanf(" %49[^\n]", required->equipment_type) != 1)
+            return;
+
+        printf("Quantity required: ");
+        if (scanf("%d", &required->quantity) != 1)
+            return;
+
+        if (required->quantity <= 0) {
+            printf("Quantity must be positive.\n");
+            return;
+        }
+
+        /* Check for duplicate equipment entries. */
+        for (int j = 0; j < i; j++) {
+            if (strcmp(s.required_equipment[j].equipment_type,
+                       required->equipment_type) == 0) {
+                printf("Equipment entered twice. Please restart.\n");
+                return;
+            }
+        }
+
+        /* Check equipment stock. */
+        int stock = getEquipmentStock(
+            hospital, required->equipment_type
+        );
+
+        if (stock < required->quantity) {
+            printf("Equipment not found or insufficient stock.\n");
+            printf("Available quantity: %d\n", stock);
+            return;
+        }
+
+        s.equipment_required += required->quantity;
+    }
+
+    if (!validateSurgery(&s)) {
         printf("Invalid surgery details.\n");
         return;
     }
 
     if (addSurgery(hospital, s)) {
-        printf("Surgery added successfully.\n");
+        printf("\nSurgery added successfully.\n");
         saveSurgeries(hospital);
     } else {
-        printf("Unable to add surgery.\n");
+        printf("Unable to add surgery. Check duplicate ID or surgery limit.\n");
     }
 }
+
+/* ================= ADD SURGEON ================= */
 
 void addSurgeonMenu(Hospital *hospital) {
     Surgeon s = {0};
 
     printf("\nEnter Surgeon ID: ");
-    scanf("%d", &s.id);
+    if (scanf("%d", &s.id) != 1) return;
 
     printf("Enter Surgeon Name: ");
-    scanf(" %49[^\n]", s.name);
+    if (scanf(" %49[^\n]", s.name) != 1) return;
 
     printf("Enter Specialization: ");
-    scanf(" %49[^\n]", s.specialization);
+    if (scanf(" %49[^\n]", s.specialization) != 1) return;
 
     s.available = 1;
 
@@ -63,17 +136,19 @@ void addSurgeonMenu(Hospital *hospital) {
     }
 }
 
+/* ================= ADD THEATRE ================= */
+
 void addTheatreMenu(Hospital *hospital) {
     OperatingTheatre t = {0};
 
     printf("\nEnter Theatre ID: ");
-    scanf("%d", &t.id);
+    if (scanf("%d", &t.id) != 1) return;
 
     printf("Enter Theatre Name: ");
-    scanf(" %49[^\n]", t.name);
+    if (scanf(" %49[^\n]", t.name) != 1) return;
 
     printf("Enter Theatre Capacity: ");
-    scanf("%d", &t.capacity);
+    if (scanf("%d", &t.capacity) != 1) return;
 
     t.available = 1;
 
@@ -85,20 +160,22 @@ void addTheatreMenu(Hospital *hospital) {
     }
 }
 
+/* ================= ADD EQUIPMENT ================= */
+
 void addEquipmentMenu(Hospital *hospital) {
     Equipment e = {0};
 
     printf("\nEnter Equipment ID: ");
-    scanf("%d", &e.id);
+    if (scanf("%d", &e.id) != 1) return;
 
     printf("Enter Equipment Name: ");
-    scanf(" %49[^\n]", e.name);
+    if (scanf(" %49[^\n]", e.name) != 1) return;
 
     printf("Enter Equipment Type: ");
-    scanf(" %49[^\n]", e.type);
+    if (scanf(" %49[^\n]", e.type) != 1) return;
 
     printf("Enter Quantity: ");
-    scanf("%d", &e.quantity);
+    if (scanf("%d", &e.quantity) != 1) return;
 
     e.available = e.quantity;
 
@@ -110,6 +187,8 @@ void addEquipmentMenu(Hospital *hospital) {
     }
 }
 
+/* ================= MAIN MENU ================= */
+
 int main(void) {
     Hospital hospital;
     initializeHospital(&hospital);
@@ -119,12 +198,39 @@ int main(void) {
     loadEquipment(&hospital);
     loadSurgeries(&hospital);
 
-    printf("\nHospital data loaded successfully.\n");
+    printf("\n");
+    printf("  +====================================================================+\n");
+    printf("  |                                                                    |\n");
+    printf("  |               PRECISION IN EVERY PROCEDURE,                        |\n");
+    printf("  |                  CARE IN EVERY DECISION                            |\n");
+    printf("  |                                                                    |\n");
+    printf("  +====================================================================+\n");
+
+    printf("\n\n");
+
+   printf("\n");
+printf("+========================================================================+\n");
+printf("|                                                                        |\n");
+printf("|     H   H   OOOOO   SSSSS   PPPPP   IIIII   TTTTT   AAAAA   L          |\n");
+printf("|     H   H  O     O  S       P    P    I       T    A     A  L          |\n");
+printf("|     HHHHH  O     O  SSSSS   PPPPP     I       T    AAAAAAA  L          |\n");
+printf("|     H   H  O     O      S   P         I       T    A     A  L          |\n");
+printf("|     H   H   OOOOO   SSSSS   P       IIIII     T    A     A  LLLLL      |\n");
+printf("|                                                                        |\n");
+printf("|                         OPERATING THEATRE (OT)                         |\n");
+printf("|                       ------------------------                         |\n");
+printf("|                          SCHEDULING SYSTEM                             |\n");
+printf("|                                                                        |\n");
+printf("|                 Optimizing Time. Maximizing Care.                      |\n");
+printf("|                                                                        |\n");
+printf("+========================================================================+\n");
+printf("\n");
+printf("       SURGICAL PRECISION  |  SMART SCHEDULING  |  OPTIMAL CARE\n\n");
 
     int choice;
 
     do {
-        printf("\n========== HOSPITAL OT SCHEDULING SYSTEM ==========\n");
+        
         printf("1. Add Surgery\n");
         printf("2. Add Surgeon\n");
         printf("3. Add Operating Theatre\n");
@@ -209,7 +315,7 @@ int main(void) {
                 scheduleUsingBranchAndBound(&hospital);
                 saveSurgeries(&hospital);
                 break;
-            
+
             case 15:
                 runBenchmark(&hospital);
                 break;
