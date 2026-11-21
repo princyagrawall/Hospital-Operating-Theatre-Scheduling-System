@@ -1,5 +1,6 @@
 
 CC = gcc
+
 CFLAGS = -std=c17 -Wall -Wextra -Iinclude -g
 
 TARGET = hospital_scheduler
@@ -19,6 +20,7 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) *.o
+	rm -rf $(TARGET).dSYM
 
 .PHONY: all run clean

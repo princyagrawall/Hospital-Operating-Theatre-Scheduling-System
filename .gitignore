@@ -1,0 +1,16 @@
+cat > .gitignore <<'EOF'
+# Compiled object files
+*.o
+
+# Executables
+hospital_scheduler
+
+# macOS debug files
+*.dSYM/
+
+# macOS system files
+.DS_Store
+
+# Editor files
+.vscode/
+EOF

@@ -32,13 +32,19 @@ typedef struct {
 typedef struct {
     int id;
     char name[50];
+
     int duration;
     int priority;
     int start_time;
     int end_time;
+
+    char required_specialization[50];
+
     int surgeon_id;
     int theatre_id;
+
     int equipment_required;
+
     int scheduled;
 } Surgery;
 
