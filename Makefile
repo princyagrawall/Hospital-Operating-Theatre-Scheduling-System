@@ -20,7 +20,13 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET) *.o
+	rm -f $(TARGET) test_edge_cases *.o
 	rm -rf $(TARGET).dSYM
 
 .PHONY: all run clean
+
+test-edge-cases:
+	$(CC) $(CFLAGS) tests/test_scheduling_edge_cases.c \
+	src/domain.c src/backtracking_scheduler.c \
+	-o test_edge_cases
+	./test_edge_cases

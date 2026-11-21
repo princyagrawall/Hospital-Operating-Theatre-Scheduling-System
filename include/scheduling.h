@@ -7,8 +7,7 @@
 void scheduleSurgeries(Hospital *hospital);
 void displaySchedule(const Hospital *hospital);
 void calculateUtilization(const Hospital *hospital);
-
 void scheduleUsingIntervalPartitioning(Hospital *hospital);
-
+void scheduleUsingBacktracking(Hospital *hospital);
 
 #endif
