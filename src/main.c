@@ -5,6 +5,7 @@
 #include "validation.h"
 #include "scheduling.h"
 #include "io.h"
+#include "benchmark.h"
 
 void addSurgeryMenu(Hospital *hospital) {
     Surgery s = {0};
@@ -138,6 +139,7 @@ int main(void) {
         printf("12. Interval Partitioning (Greedy)\n");
         printf("13. Backtracking Scheduling\n");
         printf("14. Branch and Bound Scheduling\n");
+        printf("15. Benchmark Scheduling Algorithms\n");
         printf("0. Exit\n");
 
         printf("\nEnter your choice: ");
@@ -206,6 +208,10 @@ int main(void) {
             case 14:
                 scheduleUsingBranchAndBound(&hospital);
                 saveSurgeries(&hospital);
+                break;
+            
+            case 15:
+                runBenchmark(&hospital);
                 break;
 
             case 0:

@@ -1,0 +1,18 @@
+
+Algorithm,Input_Size,Execution_Time_ns,Result,Notes
+Greedy Priority Scheduling,0,13000,Measured,Fresh copy of hospital data
+Interval Partitioning,0,2000,Measured,Fresh copy of hospital data
+Backtracking,0,3000,Measured,Fresh copy of hospital data
+Branch and Bound,0,2000,Measured,Fresh copy of hospital data
+Greedy Priority Scheduling,0,15000,Measured,Fresh copy of hospital data
+Interval Partitioning,0,3000,Measured,Fresh copy of hospital data
+Backtracking,0,3000,Measured,Fresh copy of hospital data
+Branch and Bound,0,3000,Measured,Fresh copy of hospital data
+Greedy Priority Scheduling,0,20000,Measured,Fresh copy of hospital data
+Interval Partitioning,0,5000,Measured,Fresh copy of hospital data
+Backtracking,0,3000,Measured,Fresh copy of hospital data
+Branch and Bound,0,5000,Measured,Fresh copy of hospital data
+Greedy Priority Scheduling,0,20000,Measured,Fresh copy of hospital data
+Interval Partitioning,0,6000,Measured,Fresh copy of hospital data
+Backtracking,0,5000,Measured,Fresh copy of hospital data
+Branch and Bound,0,5000,Measured,Fresh copy of hospital data

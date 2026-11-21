@@ -72,7 +72,13 @@ void loadSurgeries(Hospital *hospital) {
     if (file == NULL) return;
 
     char line[512];
-    fgets(line, sizeof(line), file); /* Skip header */
+    do {
+    if (fgets(line, sizeof(line), file) == NULL) {
+        fclose(file);
+        return;
+    }
+
+    } while (line[0] == '\n' || line[0] == '\r');
 
     while (fgets(line, sizeof(line), file)) {
         Surgery s = {0};

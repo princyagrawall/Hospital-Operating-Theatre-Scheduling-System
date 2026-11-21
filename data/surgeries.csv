@@ -1,2 +1,3 @@
-ID,Name,Duration,Priority,Start,End,Surgeon,Theatre,Scheduled
-201,Heart surgery ,20,5,540,0,0,0,0
+
+id,name,duration,priority,start_time,end_time,specialization,equipment_required,surgeon_id,theatre_id,scheduled
+201,Heart surgery,20,5,540,0,,0,0,0,0

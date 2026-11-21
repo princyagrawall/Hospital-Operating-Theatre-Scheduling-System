@@ -8,6 +8,8 @@
 #define MAX_EQUIPMENT 100
 #define MAX_REQUIRED_EQUIPMENT 10
 
+
+
 typedef struct {
     int id;
     char name[50];

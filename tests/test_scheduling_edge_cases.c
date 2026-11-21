@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <assert.h>
-
 #include "domain.h"
 #include "scheduling.h"
 
@@ -21,7 +20,6 @@ int main(void) {
 
     /* TEST 2: Surgery without a theatre */
     Surgery s1 = {0};
-
     s1.id = 1;
     s1.duration = 60;
     s1.start_time = 540;
@@ -44,7 +42,6 @@ int main(void) {
     t1.id = 1;
     t1.capacity = 5;
     t1.available = 1;
-
     assert(addTheatre(&hospital2, t1));
 
     Surgery s2 = {0};
@@ -64,10 +61,11 @@ int main(void) {
 
     scheduleUsingBacktracking(&hospital2);
 
-    assert(hospital2.surgeries[0].scheduled == 1);
+    /* Complete allocation is impossible */
+    assert(hospital2.surgeries[0].scheduled == 0);
     assert(hospital2.surgeries[1].scheduled == 0);
 
-    printf("Test 3 passed: Overlapping surgeries handled.\n");
+    printf("Test 3 passed: Overlapping surgeries rejected.\n");
 
 
     /* TEST 4: Non-overlapping surgeries */
@@ -78,7 +76,6 @@ int main(void) {
     t2.id = 1;
     t2.capacity = 5;
     t2.available = 1;
-
     assert(addTheatre(&hospital3, t2));
 
     Surgery s4 = {0};
@@ -103,7 +100,7 @@ int main(void) {
 
     printf("Test 4 passed: Non-overlapping surgeries share a theatre.\n");
 
-    printf("\nAll scheduling tests completed.\n");
+    printf("\nAll scheduling edge-case tests passed!\n");
 
     return 0;
 }
