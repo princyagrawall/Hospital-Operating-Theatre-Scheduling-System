@@ -6,6 +6,7 @@
 #define MAX_SURGEONS 50
 #define MAX_THEATRES 30
 #define MAX_EQUIPMENT 100
+#define MAX_REQUIRED_EQUIPMENT 10
 
 typedef struct {
     int id;
@@ -30,9 +31,13 @@ typedef struct {
 } OperatingTheatre;
 
 typedef struct {
+    char equipment_type[50];
+    int quantity;
+} RequiredEquipment;
+
+typedef struct {
     int id;
     char name[50];
-
     int duration;
     int priority;
     int start_time;
@@ -40,12 +45,15 @@ typedef struct {
 
     char required_specialization[50];
 
-    int surgeon_id;
-    int theatre_id;
+    RequiredEquipment required_equipment[MAX_REQUIRED_EQUIPMENT];
+    int required_equipment_count;
 
-    int equipment_required;
+   int surgeon_id;
+   int theatre_id;
 
-    int scheduled;
+   int equipment_required; 
+
+   int scheduled;
 } Surgery;
 
 typedef struct {
