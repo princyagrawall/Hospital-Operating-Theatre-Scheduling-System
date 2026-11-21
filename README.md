@@ -3,7 +3,7 @@
 
 ### Precision in Every Procedure, Care in Every Decision.
 
-A C17-based Hospital Operating Theatre Scheduling System that applies **Data Structures and Algorithms** to optimize surgery allocation, manage hospital resources, reduce scheduling conflicts, and analyze algorithm performance.
+A C-based Hospital Operating Theatre Scheduling System that applies **Data Structures and Algorithms** to optimize surgery allocation, manage hospital resources, reduce scheduling conflicts, and analyze algorithm performance.
 
 ---
 
