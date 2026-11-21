@@ -39,10 +39,16 @@ test-algorithms:
 	-o test_algorithms
 	./test_algorithms
 
-test-all: test-scheduling test-algorithms test-edge-cases
+test-branch-bound:
+	$(CC) $(CFLAGS) tests/test_branch_bound.c \
+	src/domain.c algorithms/branch_bound/least_cost_branch_bound.c \
+	-o test_branch_bound
+	./test_branch_bound
+
+test-all: test-scheduling test-algorithms test-edge-cases test-branch-bound
 
 clean:
-	rm -f $(TARGET) test_edge_cases test_scheduling test_algorithms *.o
-	rm -rf $(TARGET).dSYM test_edge_cases.dSYM test_scheduling.dSYM test_algorithms.dSYM
+	rm -f $(TARGET) test_edge_cases test_scheduling test_algorithms test_branch_bound *.o
+	rm -rf $(TARGET).dSYM test_edge_cases.dSYM test_scheduling.dSYM test_algorithms.dSYM test_branch_bound.dSYM
 
-.PHONY: all run clean test-scheduling test-edge-cases test-algorithms test-all
+.PHONY: all run clean test-scheduling test-edge-cases test-algorithms test-branch-bound test-all
