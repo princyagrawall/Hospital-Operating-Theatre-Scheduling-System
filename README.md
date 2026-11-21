@@ -589,6 +589,6 @@ It also provides an opportunity to study algorithm complexity, compare practical
 
 ---
 
-**Built with C17 | Designed around Algorithms | Focused on Smarter Scheduling**
+**Built with C | Designed around Algorithms | Focused on Smarter Scheduling**
 
-⭐ If you find this project interesting, consider giving the repository a star!
+
