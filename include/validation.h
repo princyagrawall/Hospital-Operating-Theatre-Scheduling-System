@@ -23,4 +23,11 @@ int isTheatreAvailable(
     int end
 );
 
+int isEquipmentAvailable(
+    const Hospital *hospital,
+    const Surgery *surgery,
+    int start,
+    int end
+);
+
 #endif

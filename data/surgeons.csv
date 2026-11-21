@@ -1,2 +1,4 @@
-ID,Name,Specialization
-101,Dr. sharma,Cardiology
+id,name,specialization,available
+101,Dr verma,cardiologist,1
+102,Dr Agrawal,Orthopedics,1
+103,Dr Mehta,neurologist,1

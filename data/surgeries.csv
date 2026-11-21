@@ -1,3 +1,6 @@
-
 id,name,duration,priority,start_time,end_time,specialization,equipment_required,surgeon_id,theatre_id,scheduled
-201,Heart surgery,20,5,540,0,,0,0,0,0
+201,Heart Surgery,120,10,540,660,cardiology,5,101,1,1
+203,Brain Surgery,100,9,600,700,neurology,6,103,2,1
+202,Knee Surgery,90,8,540,0,orthopedics,4,0,0,0
+204,Eye Surgery,60,6,660,0,ophthalmology,3,0,0,0
+205,Minor Surgery,45,5,720,0,general surgery,2,0,0,0

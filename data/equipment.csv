@@ -1,0 +1,8 @@
+
+id,name,type,quantity,available
+301,Heart Monitor,Cardiology,10,10
+302,Surgical Drill,Orthopedics,8,8
+303,MRI Machine,Neurology,5,5
+304,Eye Microscope,Ophthalmology,4,4
+305,Ventilator,General,10,10
+306,X-Ray Machine,Orthopedics,6,6

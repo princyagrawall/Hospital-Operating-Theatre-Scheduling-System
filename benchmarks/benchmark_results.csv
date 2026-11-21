@@ -16,3 +16,27 @@ Greedy Priority Scheduling,0,20000,Measured,Fresh copy of hospital data
 Interval Partitioning,0,6000,Measured,Fresh copy of hospital data
 Backtracking,0,5000,Measured,Fresh copy of hospital data
 Branch and Bound,0,5000,Measured,Fresh copy of hospital data
+Greedy Priority Scheduling,3,31480.00,100
+Interval Partitioning,3,47970.00,100
+Backtracking,3,35940.00,100
+Branch and Bound,3,443670.00,100
+Greedy Priority Scheduling,3,7150.00,100
+Interval Partitioning,3,6060.00,100
+Backtracking,3,5650.00,100
+Branch and Bound,3,7050.00,100
+Greedy Priority Scheduling,0,6270.00,100
+Interval Partitioning,0,5910.00,100
+Backtracking,0,5560.00,100
+Branch and Bound,0,13690.00,100
+Greedy Priority Scheduling,5,15940.00,100
+Interval Partitioning,5,14280.00,100
+Backtracking,5,3570.00,100
+Branch and Bound,5,49090.00,100
+Greedy Priority Scheduling,5,15990.00,100
+Interval Partitioning,5,18540.00,100
+Backtracking,5,29990.00,100
+Branch and Bound,5,35470.00,100
+Greedy Priority Scheduling,5,34600.00,100
+Interval Partitioning,5,33180.00,100
+Backtracking,5,21060.00,100
+Branch and Bound,5,32460.00,100

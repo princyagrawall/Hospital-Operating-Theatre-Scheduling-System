@@ -1,20 +1,65 @@
 
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "domain.h"
 #include "scheduling.h"
 #include "validation.h"
 
+/* Normalize specialization names for comparison */
+static void normalizeSpecialization(const char *input,
+                                    char *output,
+                                    size_t size) {
+    size_t j = 0;
+
+    if (input == NULL || size == 0)
+        return;
+
+    for (size_t i = 0; input[i] != '\0' && j < size - 1; i++) {
+        if (!isspace((unsigned char)input[i])) {
+            output[j++] = (char)tolower((unsigned char)input[i]);
+        }
+    }
+
+    output[j] = '\0';
+
+    if (strcmp(output, "cardiologist") == 0)
+        strcpy(output, "cardiology");
+    else if (strcmp(output, "neurologist") == 0)
+        strcpy(output, "neurology");
+    else if (strcmp(output, "orthopedist") == 0)
+        strcpy(output, "orthopedics");
+}
+
+/* Check whether surgeon specialization matches surgery requirement */
+static int specializationsMatch(const char *surgeonSpec,
+                                const char *surgerySpec) {
+    char surgeon[50];
+    char surgery[50];
+
+    normalizeSpecialization(surgeonSpec, surgeon, sizeof(surgeon));
+    normalizeSpecialization(surgerySpec, surgery, sizeof(surgery));
+
+    if (surgeon[0] == '\0' || surgery[0] == '\0')
+        return 0;
+
+    return strcmp(surgeon, surgery) == 0;
+}
+
+/* Priority-Based Greedy Scheduling */
 void scheduleSurgeries(Hospital *hospital) {
-    if (hospital == NULL) return;
+    if (hospital == NULL)
+        return;
 
     printf("\n--- PRIORITY-BASED SURGERY SCHEDULING ---\n");
 
-    /* Sort surgeries by priority */
+    /* Sort surgeries by descending priority */
     for (int i = 0; i < hospital->surgery_count - 1; i++) {
         for (int j = 0; j < hospital->surgery_count - i - 1; j++) {
             if (hospital->surgeries[j].priority <
                 hospital->surgeries[j + 1].priority) {
+
                 Surgery temp = hospital->surgeries[j];
                 hospital->surgeries[j] = hospital->surgeries[j + 1];
                 hospital->surgeries[j + 1] = temp;
@@ -27,20 +72,33 @@ void scheduleSurgeries(Hospital *hospital) {
     for (int i = 0; i < hospital->surgery_count; i++) {
         Surgery *s = &hospital->surgeries[i];
 
-        if (s->scheduled) continue;
+        if (s->scheduled)
+            continue;
 
         int start = s->start_time;
         int end = start + s->duration;
         int assigned = 0;
 
-        for (int j = 0; j < hospital->surgeon_count && !assigned; j++) {
+        /* Find a suitable surgeon */
+        for (int j = 0;
+             j < hospital->surgeon_count && !assigned;
+             j++) {
+
             Surgeon *surgeon = &hospital->surgeons[j];
 
-            if (!surgeon->available) continue;
-
-            if (!isSurgeonAvailable(hospital, surgeon->id, start, end))
+            if (!surgeon->available)
                 continue;
 
+            if (!specializationsMatch(
+                    surgeon->specialization,
+                    s->required_specialization))
+                continue;
+
+            if (!isSurgeonAvailable(
+                    hospital, surgeon->id, start, end))
+                continue;
+
+            /* Find a suitable operating theatre */
             for (int k = 0; k < hospital->theatre_count; k++) {
                 OperatingTheatre *theatre = &hospital->theatres[k];
 
@@ -48,7 +106,8 @@ void scheduleSurgeries(Hospital *hospital) {
                     theatre->capacity < s->equipment_required)
                     continue;
 
-                if (!isTheatreAvailable(hospital, theatre->id, start, end))
+                if (!isTheatreAvailable(
+                        hospital, theatre->id, start, end))
                     continue;
 
                 s->surgeon_id = surgeon->id;
@@ -67,15 +126,18 @@ void scheduleSurgeries(Hospital *hospital) {
             }
         }
 
-        if (!assigned)
+        if (!assigned) {
             printf("\nCould not schedule: %s\n", s->name);
+        }
     }
 
     printf("\nTotal surgeries scheduled: %d\n", count);
 }
 
+/* Display Final Surgery Schedule */
 void displaySchedule(const Hospital *hospital) {
-    if (hospital == NULL) return;
+    if (hospital == NULL)
+        return;
 
     printf("\n========== FINAL SURGERY SCHEDULE ==========\n");
 
@@ -84,7 +146,8 @@ void displaySchedule(const Hospital *hospital) {
     for (int i = 0; i < hospital->surgery_count; i++) {
         const Surgery *s = &hospital->surgeries[i];
 
-        if (!s->scheduled) continue;
+        if (!s->scheduled)
+            continue;
 
         printf("\nID: %d", s->id);
         printf("\nSurgery: %s", s->name);
@@ -100,13 +163,16 @@ void displaySchedule(const Hospital *hospital) {
         printf("No surgeries scheduled yet.\n");
 }
 
+/* Calculate Operating Theatre Utilization */
 void calculateUtilization(const Hospital *hospital) {
-    if (hospital == NULL) return;
+    if (hospital == NULL)
+        return;
 
     printf("\n========== THEATRE UTILIZATION ==========\n");
 
     for (int i = 0; i < hospital->theatre_count; i++) {
         const OperatingTheatre *theatre = &hospital->theatres[i];
+
         int occupied = 0;
 
         for (int j = 0; j < hospital->surgery_count; j++) {
@@ -127,6 +193,7 @@ void calculateUtilization(const Hospital *hospital) {
     }
 }
 
+/* Interval Partitioning Algorithm */
 void scheduleUsingIntervalPartitioning(Hospital *hospital) {
     if (hospital == NULL || hospital->theatre_count == 0) {
         printf("No operating theatres available.\n");
@@ -135,11 +202,13 @@ void scheduleUsingIntervalPartitioning(Hospital *hospital) {
 
     printf("\n===== INTERVAL PARTITIONING SCHEDULER =====\n");
 
-    /* Sort surgeries by start time */
+    /* Sort surgeries by ascending start time */
     for (int i = 0; i < hospital->surgery_count - 1; i++) {
         for (int j = 0; j < hospital->surgery_count - i - 1; j++) {
+
             if (hospital->surgeries[j].start_time >
                 hospital->surgeries[j + 1].start_time) {
+
                 Surgery temp = hospital->surgeries[j];
                 hospital->surgeries[j] = hospital->surgeries[j + 1];
                 hospital->surgeries[j + 1] = temp;
@@ -153,7 +222,8 @@ void scheduleUsingIntervalPartitioning(Hospital *hospital) {
     for (int i = 0; i < hospital->surgery_count; i++) {
         Surgery *s = &hospital->surgeries[i];
 
-        if (s->scheduled) continue;
+        if (s->scheduled)
+            continue;
 
         int start = s->start_time;
         int end = start + s->duration;
@@ -184,8 +254,9 @@ void scheduleUsingIntervalPartitioning(Hospital *hospital) {
             }
         }
 
-        if (!assigned)
+        if (!assigned) {
             printf("\nCould not allocate: %s\n", s->name);
+        }
     }
 
     printf("\nTotal surgeries allocated: %d\n", count);
