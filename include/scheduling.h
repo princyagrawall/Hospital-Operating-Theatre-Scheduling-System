@@ -1,8 +1,11 @@
 
 #ifndef SCHEDULING_H
 #define SCHEDULING_H
-
 #include "domain.h"
+
+void scheduleUsingIntervalPartitioning(Hospital *hospital);
+void scheduleUsingBacktracking(Hospital *hospital);
+void scheduleUsingBranchAndBound(Hospital *hospital);
 
 void scheduleSurgeries(Hospital *hospital);
 void displaySchedule(const Hospital *hospital);

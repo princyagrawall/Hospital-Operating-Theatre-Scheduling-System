@@ -1,36 +1,58 @@
 
 #include <stdio.h>
 
-int binarySearchIterative(int arr[], int n, int key) {
+typedef struct {
+    int id;
+    char name[50];
+} Surgery;
+
+// Binary Search: searches for a surgery using its ID
+int binarySearch(Surgery surgeries[], int n, int targetID) {
     int low = 0;
     int high = n - 1;
 
     while (low <= high) {
         int mid = low + (high - low) / 2;
 
-        if (arr[mid] == key)
+        if (surgeries[mid].id == targetID) {
             return mid;
-
-        if (arr[mid] < key)
+        }
+        else if (surgeries[mid].id < targetID) {
             low = mid + 1;
-        else
+        }
+        else {
             high = mid - 1;
+        }
     }
 
     return -1;
 }
 
-int binarySearchRecursive(int arr[], int low, int high, int key) {
-    if (low > high)
-        return -1;
+int main() {
+    Surgery surgeries[] = {
+        {101, "Heart Surgery"},
+        {102, "Brain Surgery"},
+        {103, "Eye Surgery"},
+        {104, "Knee Surgery"},
+        {105, "Kidney Surgery"}
+    };
 
-    int mid = low + (high - low) / 2;
+    int n = sizeof(surgeries) / sizeof(surgeries[0]);
+    int targetID;
 
-    if (arr[mid] == key)
-        return mid;
+    printf("Enter Surgery ID to search: ");
+    scanf("%d", &targetID);
 
-    if (arr[mid] < key)
-        return binarySearchRecursive(arr, mid + 1, high, key);
+    int result = binarySearch(surgeries, n, targetID);
 
-    return binarySearchRecursive(arr, low, mid - 1, key);
+    if (result != -1) {
+        printf("Surgery Found!\n");
+        printf("ID: %d\n", surgeries[result].id);
+        printf("Name: %s\n", surgeries[result].name);
+    }
+    else {
+        printf("Surgery not found.\n");
+    }
+
+    return 0;
 }

@@ -1,6 +1,5 @@
 
 CC = gcc
-
 CFLAGS = -std=c17 -Wall -Wextra -Iinclude -g
 
 TARGET = hospital_scheduler
@@ -9,7 +8,9 @@ SRC = src/main.c \
       src/domain.c \
       src/validation.c \
       src/io.c \
-      src/scheduling.c
+      src/scheduling.c \
+      src/backtracking_scheduler.c \
+      algorithms/branch_bound/least_cost_branch_bound.c
 
 all: $(TARGET)
 
@@ -19,14 +20,14 @@ $(TARGET): $(SRC)
 run: $(TARGET)
 	./$(TARGET)
 
-clean:
-	rm -f $(TARGET) test_edge_cases *.o
-	rm -rf $(TARGET).dSYM
-
-.PHONY: all run clean
-
 test-edge-cases:
 	$(CC) $(CFLAGS) tests/test_scheduling_edge_cases.c \
 	src/domain.c src/backtracking_scheduler.c \
 	-o test_edge_cases
 	./test_edge_cases
+
+clean:
+	rm -f $(TARGET) test_edge_cases *.o
+	rm -rf $(TARGET).dSYM test_edge_cases.dSYM
+
+.PHONY: all run clean test-edge-cases

@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include <string.h>
 
 #include "domain.h"
 #include "validation.h"
@@ -114,7 +113,6 @@ int main(void) {
     Hospital hospital;
     initializeHospital(&hospital);
 
-    /* Load previously saved data */
     loadSurgeons(&hospital);
     loadTheatres(&hospital);
     loadEquipment(&hospital);
@@ -134,9 +132,12 @@ int main(void) {
         printf("6. Display Surgeons\n");
         printf("7. Display Theatres\n");
         printf("8. Display Equipment\n");
-        printf("9. Generate Surgery Schedule\n");
+        printf("9. Generate Priority-Based Schedule (Greedy)\n");
         printf("10. Display Schedule\n");
         printf("11. Calculate Theatre Utilization\n");
+        printf("12. Interval Partitioning (Greedy)\n");
+        printf("13. Backtracking Scheduling\n");
+        printf("14. Branch and Bound Scheduling\n");
         printf("0. Exit\n");
 
         printf("\nEnter your choice: ");
@@ -190,6 +191,21 @@ int main(void) {
 
             case 11:
                 calculateUtilization(&hospital);
+                break;
+
+            case 12:
+                scheduleUsingIntervalPartitioning(&hospital);
+                saveSurgeries(&hospital);
+                break;
+
+            case 13:
+                scheduleUsingBacktracking(&hospital);
+                saveSurgeries(&hospital);
+                break;
+
+            case 14:
+                scheduleUsingBranchAndBound(&hospital);
+                saveSurgeries(&hospital);
                 break;
 
             case 0:
